@@ -1,0 +1,1097 @@
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>나의 글 모음</title>
+
+<style>
+
+/* =====================================================
+   전체 브라우저
+   ===================================================== */
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    font-family: 'Noto Sans KR', sans-serif;
+
+    background-image: url('background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+/* =====================================================
+   전체 시카페
+   ===================================================== */
+
+.reader {
+
+    width: 100%;
+    height: 100vh;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: stretch;
+
+    gap: 20px;
+
+    padding: 15px 20px;
+}
+
+
+/* =====================================================
+   왼쪽 제목 영역
+   ===================================================== */
+
+.sidebar {
+
+    width: 16vw;
+    min-width: 180px;
+
+    height: 100%;
+
+    box-sizing: border-box;
+
+    padding: 20px 15px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(30,30,30,0.90),
+            rgba(55,55,55,0.84)
+        );
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.30);
+
+    color: white;
+
+    overflow: hidden;
+
+    flex-shrink: 0;
+}
+
+
+/* =====================================================
+   제목
+   ===================================================== */
+
+.main-title {
+
+    text-align: center;
+
+    font-size: 25px;
+
+    font-weight: 600;
+
+    margin-bottom: 18px;
+
+    letter-spacing: 2px;
+}
+
+
+/* =====================================================
+   음악
+   ===================================================== */
+
+.audio-box {
+
+    width: 100%;
+
+    margin-bottom: 18px;
+
+    text-align: center;
+}
+
+.audio-box audio {
+
+    width: 100%;
+}
+
+
+/* =====================================================
+   제목 목록
+   ===================================================== */
+
+.title-list {
+
+    width: 100%;
+
+    overflow: hidden;
+}
+
+
+.title-item {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 10px 8px;
+
+    margin-bottom: 6px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+    color: #eeeeee;
+
+    transition:
+        background 0.2s,
+        transform 0.2s;
+}
+
+
+.title-item:hover {
+
+    background: rgba(255,255,255,0.14);
+
+    transform: translateX(3px);
+}
+
+
+.title-item.active {
+
+    background: rgba(255,255,255,0.22);
+
+    color: white;
+
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   오른쪽 전체 영역
+   ===================================================== */
+
+.content {
+
+    width: 45vw;
+
+    height: 100%;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    flex-direction: column;
+
+    flex-shrink: 0;
+
+    min-height: 0;
+}
+
+
+/* =====================================================
+   본문 박스
+   ★ 본문 아래 수열 공간을 위해 높이를 줄임
+   ===================================================== */
+
+.content-box {
+
+    flex: 1;
+
+    min-height: 0;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 30px 40px;
+
+    border-radius: 18px;
+
+    background: rgba(253,246,227,0.95);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.25);
+
+    color: #333;
+
+    font-size: 18px;
+
+    line-height: 1.9;
+
+    white-space: pre-line;
+
+    /*
+       ★ 핵심
+       본문 박스 안에서만 스크롤
+    */
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    scrollbar-gutter: stable;
+
+    display: none;
+}
+
+
+/* 현재 본문 */
+
+.content-box.active {
+
+    display: block;
+}
+
+
+/* =====================================================
+   본문 제목
+   ===================================================== */
+
+.content-title {
+
+    font-size: 27px;
+
+    font-weight: 600;
+
+    margin-bottom: 25px;
+
+    padding-bottom: 12px;
+
+    border-bottom:
+        1px solid rgba(0,0,0,0.12);
+}
+
+
+/* =====================================================
+   본문 스크롤바
+   ===================================================== */
+
+.content-box::-webkit-scrollbar {
+
+    width: 9px;
+}
+
+.content-box::-webkit-scrollbar-track {
+
+    background: rgba(0,0,0,0.06);
+
+    border-radius: 10px;
+}
+
+.content-box::-webkit-scrollbar-thumb {
+
+    background: rgba(80,80,80,0.38);
+
+    border-radius: 10px;
+}
+
+
+/* =====================================================
+   ★ 본문 아래 페이지 수열
+   ===================================================== */
+
+.pagination {
+
+    flex: 0 0 55px;
+
+    height: 55px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+}
+
+
+/* 페이지 번호 */
+
+.page-number {
+
+    min-width: 30px;
+
+    height: 30px;
+
+    padding: 0 8px;
+
+    border: none;
+
+    border-radius: 15px;
+
+    background: rgba(40,40,40,0.65);
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    transition:
+        background 0.2s,
+        transform 0.2s;
+}
+
+
+.page-number:hover {
+
+    background: rgba(40,40,40,0.85);
+
+    transform: translateY(-2px);
+}
+
+
+/* 현재 페이지 */
+
+.page-number.active {
+
+    background: rgba(255,255,255,0.92);
+
+    color: #333;
+
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   작은 화면
+   ===================================================== */
+
+@media (max-width: 900px) {
+
+    .reader {
+
+        gap: 10px;
+
+        padding: 10px;
+    }
+
+    .sidebar {
+
+        width: 24vw;
+
+        min-width: 150px;
+    }
+
+    .content {
+
+        width: 55vw;
+    }
+
+    .content-box {
+
+        padding: 25px;
+
+        font-size: 17px;
+    }
+
+    .title-item {
+
+        font-size: 14px;
+    }
+}
+.my-name {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    color: #f0e68c; /* 따뜻한 황금빛 */
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     전체 시카페
+     ===================================================== -->
+
+<div class="reader">
+
+
+    <!-- =================================================
+         왼쪽 제목
+         ================================================= -->
+
+    <aside class="sidebar">
+
+        <div class="main-title">
+            나의 글 모음
+        </div>
+
+<div class="my-name">
+    시인 육종탁 
+</div>
+
+
+        <!-- 음악 -->
+
+        <div class="audio-box">
+
+            <audio id="music"
+                   controls
+                   preload="auto"
+                   loop>
+
+                <source src="music.mp3" type="audio/mpeg">
+
+            </audio>
+
+        </div>
+
+
+        <!-- 제목 목록 -->
+
+        <div class="title-list">
+
+
+           <div class="title-item" onclick="showContent(0)">옛추억</div>
+    <div class="title-item" onclick="showContent(1)">가을 안개는</div>
+    <div class="title-item" onclick="showContent(2)">가을날 기도</div>
+      <div class="title-item" onclick="showContent(3)">당신의 자리</div>
+    <div class="title-item" onclick="showContent(4)">당신의 체온</div>
+       <div class="title-item" onclick="showContent(5)">사랑을 품은 가슴은</div>
+    <div class="title-item" onclick="showContent(6)">선유도</div>
+    <div class="title-item" onclick="showContent(7)">가을 앞에서 나는</div>
+      <div class="title-item" onclick="showContent(8)"> 비 내리는 도시의 밤 거리는</div>
+    <div class="title-item" onclick="showContent(9)">성탄이 오는 마을</div>
+</div>
+
+
+
+
+    
+
+    </aside>
+
+
+<!-- =========================
+     오른쪽 글 내용
+     ========================= -->
+<div class="content">
+    <div class="content-box" id="content0">
+
+잔물결 위로 물안개 아련히 피어오르는
+그날의 의암호 밤은
+아직도 작은 산장 낡은 창가에
+그 모습 그대로 남아 있겠지
+
+가을 참나무 메마른 가지 끝에
+함께 뿌려 놓았던 순백의 한삼은
+아직도 빛바래지 않은 그 색으로
+쓸쓸하게 늘어져 있겠지
+
+솔잎 하나씩 태워 정성껏 끓여낸
+따스했던 그 찻잔은
+아직도 우리의 시간처럼
+둘이 마주 보듯 거기에 놓여 있겠지
+
+삼악산 굽이진 오솔길 저 멀리
+내가 너를 애틋이 업고 간 흐릿한 발자국
+아직도 그 길 위에 우리 두 마음은
+멈추지 않고 영원히 걸어 가고 있겠지
+
+아... 늙어 가는 서러운 노을 젖은 눈빛에
+선명하게 물들어 가는 향연의 옛길
+무거운 산 그림자마저 깊은 가을 품에
+지쳐 쓰러지듯 고요히 누워 있네
+
+삼악산 굽이진 오솔길 저 멀리
+내가 너를 애틋이 업고 간 흐릿한 발자국
+아직도 그 길 위에 우리 두 마음은
+멈추지 않고 영원히 걸어 가고 있겠지
+
+따스한 찻잔은... 
+아직도 두 마음은... 
+아직도 걸어 가고 있겠지
+그리운 널...
+    </div>
+    <div class="content-box" id="content1">
+
+가을 안개는
+숲의 숨결을 감싸고
+
+산장은
+고요한 시간의 집이 되어
+
+너에게로 가는
+나의 발자국은
+젖은 낙엽 위에
+조용히 스며든다
+
+아직 식지 않은
+눈빛을 안고
+
+나는 
+너의 꿈을 지켜보며
+새벽의 빛을 기다린다
+
+햇살이 숲을 열면
+우리의 아침은
+더 깊은 평화로 깨어나리라
+    </div>
+    <div class="content-box" id="content2">
+     
+가을이 남긴 
+하얀 종이 위에 
+너의 얼굴 그려 놓고
+
+지우개로 지우고 떠나는 마음에
+되돌아보면
+다시 지워야 할 얼굴이 그려지고
+
+끊일 듯 이어지는 바알간 숨소리
+가을날 기도는
+조용히 물들어 가는 단품잎의 기도는
+
+죽음도 고운 열매인 것은
+비옥한 부엽토로 숙성되어
+
+너의 차가운 겨울날
+모든 사랑이 
+알부민으로 돌아가려는
+가을 날 기도는
+너의 봄을 기다리는 
+물총새 노래
+    </div>
+ 
+    
+<div class="content-box" id="content3">
+
+사랑은 부족한 사람들이 만나
+완전한 하나가 되는 것
+
+온전한 사람 둘이 만나면
+채워 줄 것이 없어 둘로 남을 뿐
+
+나 부족한 곳에 당신이 있고
+당신의 빈 곳에 내가 있습니다
+서로의 마음 기대어 살아가는
+그것이 사랑입니다
+
+내 마음의 빈자리는
+처음부터 당신 자리였습니다
+몸은 예전 같지 않아도
+마음 둘 곳은 남아 있습니다
+
+먼 별빛 따라 걸어온 길
+오늘도 함께 웃는 우리
+당신이 있어 나는 하나
+그것이 우리 사랑입니다
+
+몸은 불편하여도 괜찮습니다
+서로에게 의지가 되니까요
+
+기쁨도 슬픔도 함께 나누며
+오늘도 같은 길을 걷습니다
+
+나 부족한 곳에 당신이 있고
+당신의 빈 곳에 내가 있습니다
+세월이 흘러도 변하지 않는
+우리의 사랑입니다
+
+내 마음의 빈자리는
+처음부터 당신 자리였습니다
+몸은 예전 같지 않아도
+마음 둘 곳은 남아 있습니다
+
+먼 별빛 따라 걸어온 길
+오늘도 함께 웃는 우리
+당신이 있어 나는 하나
+그것이 우리 사랑입니다
+
+내 마음의 빈자리는
+처음부터 당신 자리였습니다
+
+나 부족한 곳에 당신이 있고
+당신의 빈 곳에 내가 있습니다
+
+그것이 사랑입니다
+
+그것이 우리입니다.
+    </div>
+
+    <div class="content-box" id="content4">
+
+당신의 체온이
+내게 닿는 순간
+
+이 가을은
+춥지 않을거야
+
+창문에 숨결 하나
+우리 사이에 걸어 둔
+작은 등불처럼 흔들리고
+
+말하지 않아도
+당신의 가슴에서
+따뜻한 안부가 전해 온다.
+
+삶이 덜컹거리며
+어둠을 지나갈 때
+
+우리는
+서로의 손을 놓지 않는다.
+
+그것이면 충분하다.
+
+사랑은
+불꽃이 아니라
+
+꺼지지 않는
+작은 온기 하나.
+
+그 온기 하나 품고
+긴 밤을 건너 오면
+
+밤 이슬에 젖는 마음
+
+우리의 체온으로  
+아침빛이 온다
+
+그리고
+
+아침빛이  
+깊어 가는 가을
+이 하루
+살아 갈수 있도록
+우리의 체온을 덮어준다
+    </div>
+
+
+  
+<div class="content-box" id="content5">
+
+ 사랑을 품은 가슴은 
+
+사랑을 낳고
+
+심지어
+미움마저 자식처럼 품어
+가슴을 태우는 사랑은
+
+마침내 
+기도가 됩니다 
+
+    </div>
+
+    <div class="content-box" id="content6">
+
+선유도의 가을은
+시간에 매이지 않은 채
+익어만 간다
+
+은빛 머리 흔들며
+달려오는 억새 바람에
+가을은
+더 깊어만 간다
+
+나무들이 사는 숲속
+구름의 유혹에 
+상처 난 잎들도
+언제 울었냐는 듯
+아름다운 빛으로
+타들어 간다
+
+한때는
+푸른 잎 젊은 계절로
+사는 것이라 믿었을까
+
+바람에 흔들리고
+비에 젖고
+햇살에 그을린 자리마다
+잎들은 본향의 빛을 찾아간다
+
+가을은
+상처를 품은 채
+하얗게 익어가는
+노인들의 얼굴 같다
+
+저물어 간다는 것은
+사라지는 일이 아니라
+마지막까지
+자신을 아름답게 익혀가는 일
+
+선유도의 가을은
+마지막 잎 하나까지 
+산딸나무 가지 내려 오는
+바람의 눈빛으로 물들어 간다
+    </div>
+<div class="content-box" id="content7">
+
+가을 앞에서 나는
+낙엽을 뒤집어쓴
+소녀의 기도를 듣는다
+
+너의 이력은
+때 묻은 손에 꼭 쥐어 있고
+고름이 흐르는 등짝에
+시린 갈바람이 분다
+
+남의 집 모퉁이에 기대어
+너와 나 벌어진 살 사이
+연고를 집어넣고
+우리는 연리지 융합을 기다린다
+
+눈빛이 반짝이는 소녀 앞에
+바람은 고요히 머물러
+갈대 잎 하나 흔들지 않는다
+
+내겐 시원했던 바람이,
+너에겐 상처를 후벼 파는
+태풍이 되었던 지난밤
+
+숨을 조용히 쉬어라
+상처는 우리에게도 남아 있다
+
+이 계절을 지나가는 일은
+서로의 슬픔을
+다른 이름으로 부르는 일이다
+
+가을빛에 물드는 천사는
+맑은 눈으로 웃는 소녀에게
+조금씩 물들어 간다
+
+겨울로 간 소녀는
+숲속에 신발이 웃는
+발자국을 남긴다
+    </div>
+
+    
+
+    <div class="content-box" id="content8">
+
+비 내리는 도시의 밤거리는
+온통 불바다
+
+젖은 아스팔트 위로
+빛들이 번지고
+
+선명했던 
+노란 두 줄의 중앙선은
+우리 사이에 남아 있던
+마지막 망설임까지
+태워버린다
+
+네온 불빛에 취한
+우산속 우리는
+서로 더 기울져 간다
+
+그 순간
+우리는 알았다
+
+돌아갈 이유보다
+함께 가고 싶은 쪽이
+이미 더 가까워졌다는 걸
+
+비는 계속 내리고
+도시는 아무 말도 하지 않지만
+
+우산 속 우리는
+사랑이라는 이름의
+먼 여행을
+조용히 시작하고 있었다
+</div>
+<div class="content-box" id="content9">
+
+성탄이 오는
+숲과 마을을 지었어요
+고요한 가지 사이로
+그리움으로 내려오는 눈은
+당신이 사랑하는 눈사람이 되었어요
+눈이 고요하게 쌓일수록
+흩어진 마음은
+하얗게 기도하는 모습으로
+새도 울지 않는 겨울 숲
+십자가 아래서
+주님 오시는 날을 기다립니다
+주의 임재로
+우리의 마음을 감싸시면
+닫혀 있던 문이 열리고
+은혜가 눈처럼 내립니다
+하얀 세상이 열리면
+주님의 평안이 있는곳
+멀리 가지 않아도 좋은
+여기 이 자리에서
+우린 주 손안에 머물러요
+주의 은혜 안에서
+오늘도 주님 안에 머물러요
+하얀 세상에서 머물러요
+
+    </div>
+
+
+
+
+
+        <!-- =================================================
+             페이지 수열
+             ================================================= -->
+
+        <div class="pagination" id="pagination"></div>
+
+
+    </main>
+
+</div>
+
+
+
+<script>
+
+/* =====================================================
+   기본 설정
+   ===================================================== */
+
+const itemsPerPage = 10;
+
+const music =
+    document.getElementById("music");
+
+const titles =
+    document.querySelectorAll(".title-item");
+
+const contents =
+    document.querySelectorAll(".content-box");
+
+const pagination =
+    document.getElementById("pagination");
+
+
+/* =====================================================
+   페이지 번호 만들기
+   ===================================================== */
+
+function createPagination() {
+
+    pagination.innerHTML = "";
+
+    const totalPages =
+        Math.ceil(
+            titles.length / itemsPerPage
+        );
+
+
+    for (
+        let page = 1;
+        page <= totalPages;
+        page++
+    ) {
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "page-number";
+
+        button.textContent =
+            page;
+
+
+        button.onclick = function() {
+
+            showPage(page);
+
+        };
+
+
+        pagination.appendChild(button);
+
+    }
+
+}
+
+
+/* =====================================================
+   페이지 표시
+   ===================================================== */
+
+function showPage(page) {
+
+    const start =
+        (page - 1) * itemsPerPage;
+
+    const end =
+        start + itemsPerPage;
+
+
+    /* 제목 표시 */
+
+    titles.forEach(
+        (title, index) => {
+
+            if (
+                index >= start &&
+                index < end
+            ) {
+
+                title.style.display =
+                    "block";
+
+            } else {
+
+                title.style.display =
+                    "none";
+
+            }
+
+        }
+    );
+
+
+    /* 페이지 번호 활성화 */
+
+    const buttons =
+        document.querySelectorAll(
+            ".page-number"
+        );
+
+
+    buttons.forEach(
+        (button, index) => {
+
+            if (
+                index + 1 === page
+            ) {
+
+                button.classList.add(
+                    "active"
+                );
+
+            } else {
+
+                button.classList.remove(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* 해당 페이지 첫 번째 시 */
+
+    showContent(start);
+
+}
+
+
+/* =====================================================
+   ★ 제목 클릭
+   본문 표시 + 음악 재생
+   ===================================================== */
+
+function showContent(number) {
+
+
+    /* 모든 본문 닫기 */
+
+    contents.forEach(
+        content => {
+
+            content.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
+
+    /* 선택한 본문 열기 */
+
+    if (contents[number]) {
+
+        contents[number].classList.add(
+            "active"
+        );
+
+
+        /*
+           새로운 시를 열면
+           본문 맨 위에서 시작
+        */
+
+        contents[number].scrollTop = 0;
+
+    }
+
+
+    /* 제목 활성화 */
+
+    titles.forEach(
+        (title, index) => {
+
+            if (index === number) {
+
+                title.classList.add(
+                    "active"
+                );
+
+            } else {
+
+                title.classList.remove(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =================================================
+       제목을 클릭하면 음악 재생
+       ================================================= */
+
+    if (music) {
+
+        music.play().catch(
+            function(error) {
+
+                console.log(
+                    "음악 재생을 시작하지 못했습니다.",
+                    error
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   시작
+   ===================================================== */
+
+createPagination();
+
+showPage(1);
+
+</script>
+
+
+</body>
+</html>
+```
