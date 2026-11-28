@@ -1,0 +1,204 @@
+```html
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>나의 글 모음</title>
+
+
+<style>
+
+/* =================================
+   전체 브라우저
+   ================================= */
+
+html, body {
+
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    background: #000;
+
+}
+
+
+/* =================================
+   전체 화면 이미지
+   ================================= */
+
+.full-image {
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    object-fit: cover;
+
+    object-position: center;
+
+    z-index: 1;
+
+}
+
+
+/* =================================
+   음악 미디어 박스
+   ================================= */
+
+.audio-box {
+
+    position: fixed;
+
+    bottom: 25px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 320px;
+
+    padding: 12px;
+
+    box-sizing: border-box;
+
+    background:
+        rgba(30,30,30,0.70);
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,0.35);
+
+    z-index: 10;
+
+}
+
+
+/* 음악 플레이어 */
+
+.audio-box audio {
+
+    display: block;
+
+    width: 100%;
+
+}
+
+
+/* =================================
+   작은 화면 대응
+   ================================= */
+
+@media (max-width: 600px) {
+
+    .audio-box {
+
+        width: 85%;
+
+        bottom: 15px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =================================
+     전체 화면 배경 이미지
+     ================================= -->
+
+<img
+    src="background.jpg"
+    class="full-image"
+    alt="배경 이미지"
+>
+
+
+<!-- =================================
+     음악 미디어 박스
+     ================================= -->
+
+<div class="audio-box">
+
+    <audio
+        id="music"
+        controls
+        autoplay
+        preload="auto"
+        loop>
+
+        <source
+            src="music.mp3"
+            type="audio/mpeg">
+
+        브라우저가 음악 재생을 지원하지 않습니다.
+
+    </audio>
+
+</div>
+
+
+<!-- =================================
+     음악 재생 설정
+     ================================= -->
+
+<script>
+
+const music =
+    document.getElementById("music");
+
+
+/* 음량 설정 */
+
+music.volume = 0.5;
+
+
+/* 자동 재생 차단 시 화면 클릭으로 시작 */
+
+document.addEventListener("click", function() {
+
+    music.play().catch(function() {
+
+        console.log("음악 재생을 시작할 수 없습니다.");
+
+    });
+
+}, { once: true });
+
+
+/* 자동 재생 시도 */
+
+music.play().catch(function() {
+
+    console.log("화면을 클릭하면 음악이 시작됩니다.");
+
+});
+
+</script>
+
+
+</body>
+
+</html>
+```
