@@ -1,0 +1,217 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>시 낭송</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    font-family: "Noto Serif KR", "Batang", serif;
+    color: white;
+    background:
+        linear-gradient(rgba(0,0,0,0.38), rgba(0,0,0,0.55)),
+        url("background.jpg") center center / cover fixed no-repeat;
+    min-height: 100vh;
+    min-height: 100dvh;
+    text-align: center;
+}
+
+.container {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 80px 20px 130px;
+}
+
+.main-title {
+    font-size: 42px;
+    font-weight: normal;
+    letter-spacing: 12px;
+    margin: 0 0 5px;
+    text-shadow: 0 3px 12px rgba(0,0,0,0.8);
+}
+
+.author {
+    font-size: 18px;
+    letter-spacing: 5px;
+    margin-bottom: 30px;
+}
+
+.poem-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin: 0;
+    padding: 5px 0 40px;
+}
+
+.poem-list button {
+    background: transparent;
+    border: none;
+    color: white;
+    font-family: inherit;
+    font-size: 23px;
+    letter-spacing: 4px;
+    cursor: pointer;
+    padding: 6px 15px;
+    transition: 0.3s;
+    text-shadow: 0 2px 8px black;
+}
+
+.poem-list button:hover {
+    color: #f3d9a0;
+    transform: scale(1.08);
+}
+
+.poem-list button.active {
+    color: #f3d9a0;
+}
+
+.player {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 18px 20px;
+    background: rgba(0,0,0,0.72);
+    backdrop-filter: blur(8px);
+    z-index: 10;
+}
+
+.now-playing {
+    font-size: 15px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+audio {
+    width: min(600px, 100%);
+}
+
+@media (max-width: 600px) {
+
+    body {
+        background-attachment: scroll;
+    }
+
+    .container {
+        padding: 70px 15px 120px;
+    }
+
+    .main-title {
+        font-size: 32px;
+        letter-spacing: 8px;
+    }
+
+    .author {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .poem-list button {
+        font-size: 19px;
+        letter-spacing: 2px;
+    }
+
+    .player {
+        padding: 12px 10px;
+    }
+
+    .now-playing {
+        font-size: 13px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1 class="main-title">사랑하는 낭송시를 들으며</h1>
+
+    <div class="author">
+        By 육종탁
+    </div>
+
+    <div class="poem-list">
+
+        <button onclick="playPoem(this,'겨울 숲에서.mp3','겨울 숲에서')">
+            겨울 숲에서
+        </button>
+
+        <button onclick="playPoem(this,'내가 떠날때.mp3','내가 떠날때')">
+            내가 떠날때
+        </button>
+
+        <button onclick="playPoem(this,'우리의 비율.mp3','우리의 비율')">
+            우리의 비율
+        </button>
+
+        <button onclick="playPoem(this,'우리의 사랑.mp3','우리의 사랑')">
+            우리의 사랑
+        </button>
+
+        <button onclick="playPoem(this,'당신은 나에게 언제나 그리움만 줍니다.mp3','당신은 나에게 언제나 그리움만 줍니다')">
+            당신은 나에게 언제나 그리움만 줍니다
+        </button>
+
+        <button onclick="playPoem(this,'당신의 눈속에.mp3','당신의 눈속에')">
+            당신의 눈속에
+        </button>
+
+    </div>
+
+</div>
+
+<div class="player">
+
+    <div class="now-playing" id="nowPlaying">
+        낭송할 시를 선택하세요
+    </div>
+
+    <audio id="audioPlayer" controls preload="none"></audio>
+
+</div>
+
+<script>
+const audioPlayer = document.getElementById("audioPlayer");
+const nowPlaying = document.getElementById("nowPlaying");
+
+function playPoem(button, file, title) {
+
+    audioPlayer.src = file;
+    nowPlaying.textContent = "낭송 중 : " + title;
+
+    document.querySelectorAll(".poem-list button").forEach(function(item) {
+        item.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    audioPlayer.play().catch(function() {
+        nowPlaying.textContent =
+        title + " - 아래 재생 버튼을 눌러주세요";
+    });
+}
+</script>
+
+</body>
+</html>
